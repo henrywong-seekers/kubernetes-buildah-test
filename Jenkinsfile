@@ -8,6 +8,13 @@ spec:
     image: quay.io/buildah/stable:v1.14.3
     command: ["cat"]
     tty: true
+    volumeMounts:
+    - name: containers1
+      mountPath: /var/lib/containers
+  volumes:
+  - name: containers1
+    hostPath:
+      path: /var/lib/containers1
 """
 ) {
   node(POD_LABEL) {
