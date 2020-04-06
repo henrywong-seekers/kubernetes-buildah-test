@@ -8,18 +8,6 @@ spec:
     image: quay.io/buildah/stable:v1.14.3
     command: ["cat"]
     tty: true
-    volumeMounts:
-    - name: containers1
-      mountPath: /var/lib/containers
-    - name: fuse
-      mountPath: /dev/fuse
-  volumes:
-  - name: containers1
-    hostPath:
-      path: /var/lib/containers1
-  - name: fuse
-    hostPath:
-      path: /dev/fuse
 """
 ) {
   node(POD_LABEL) {
@@ -27,6 +15,7 @@ spec:
 
     stage('Build') {
       container('buildah') {
+        sh './vfs.sh'
         sh 'buildah unshare ./test.sh'
       }
     }
