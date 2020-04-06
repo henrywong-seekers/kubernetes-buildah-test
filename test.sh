@@ -1,10 +1,25 @@
 #!/bin/sh
 
-dnf install unzip -y
+dnf install -q unzip -y || {
+  echo "Failed to install unzip"
+  exit 1
+}
 
-curl https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip
+echo "Installed unzip"
 
-curl https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip.sig -o awscliv2.sig
+curl -sS https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip || {
+  echo "Failed to download awscli"
+  exit 1
+}
+
+echo "Downloaded awscli"
+
+curl -sS https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip.sig -o awscliv2.sig || {
+  echo "Failed to download awscli signature"
+  exit 1
+}
+
+echo "Downloaded awscli signature"
 
 cat << EOF | gpg --import -
 -----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -38,9 +53,19 @@ YLZATHZKTJyiqA==
 -----END PGP PUBLIC KEY BLOCK-----
 EOF
 
-gpg --verify awscliv2.sig awscliv2.zip
+gpg --verify awscliv2.sig awscliv2.zip 2>/dev/null || {
+  echo "Failed to verify awscli"
+  exit 1
+}
 
-unzip awscliv2.zip
+echo "Verified awscli"
+
+unzip -q awscliv2.zip || {
+  echo "Failed to unzip awscli"
+  exit 1
+}
+
+echo "Unziped awscli"
 
 curl -LOfsS https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 || {
   echo "Failed to download jq"
@@ -50,25 +75,25 @@ curl -LOfsS https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 |
 echo "Downloaded jq"
 
 curl -OfsS https://raw.githubusercontent.com/stedolan/jq/master/sig/v1.6/jq-linux64.asc || {
-  echo "Failed to download signature"
+  echo "Failed to download jq signature"
   exit 1
 }
 
-echo "Downloaded signature"
+echo "Downloaded jq signature"
 
 curl -OfsS https://raw.githubusercontent.com/stedolan/jq/master/sig/v1.6/sha256sum.txt || {
-  echo "Failed to download checksum"
+  echo "Failed to download jq checksum"
   exit 1
 }
 
-echo "Downloaded checksum"
+echo "Downloaded jq checksum"
 
 curl -sS https://raw.githubusercontent.com/stedolan/jq/master/sig/jq-release.key | gpg --import 2>/dev/null || {
-  echo "Failed import gpg key"
+  echo "Failed import jq gpg key"
   exit 1
 }
 
-echo "Imported gpg key"
+echo "Imported jq gpg key"
 
 gpg --verify jq-linux64.asc 2>/dev/null || {
   echo "Failed to verify jq"
