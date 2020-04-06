@@ -21,7 +21,7 @@ curl -sS https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip.sig -o awscliv
 
 echo "Downloaded awscli signature"
 
-cat << EOF | gpg --import -
+cat << EOF | gpg --import - 2>/dev/null
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 
 mQINBF2Cr7UBEADJZHcgusOJl7ENSyumXh85z0TRV0xJorM2B/JL0kHOyigQluUG
@@ -109,13 +109,25 @@ sha256sum -c --ignore-missing --quiet sha256sum.txt || {
 
 echo "Verified jq checksum"
 
+chmod +x jq-linux64
+
+ctr0=$(buildah from fedora:31)
+mnt0=$(buildah mount $ctr0)
+
+buildah copy $ctr0 aws aws
+buildah run $ctr0 aws/install
+
 ctr=$(buildah from fedora:31)
 mnt=$(buildah mount $ctr)
 
-chmod +x jq-linux64
+cp $mnt0/usr/local/bin/aws $mnt/usr/local/bin
+cp $mnt0/usr/local/bin/aws_completer $mnt/usr/local/bin
+
+cp -r $mnt0/usr/local/aws-cli $mnt/usr/local
 
 cp jq-linux64 $mnt/usr/local/bin/jq
 
+buildah unmount $ctr0
 buildah unmount $ctr
 
 buildah config --entrypoint "" $ctr
