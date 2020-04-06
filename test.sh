@@ -127,8 +127,8 @@ ls -al $mnt0/usr/local/bin/aws
 ls -al $mnt0/usr/local/bin/aws_completer
 ls -al $mnt0/usr/local
 
-cp $mnt0/usr/local/bin/aws $mnt/usr/local/bin
-cp $mnt0/usr/local/bin/aws_completer $mnt/usr/local/bin
+cp -P $mnt0/usr/local/bin/aws $mnt/usr/local/bin
+cp -P $mnt0/usr/local/bin/aws_completer $mnt/usr/local/bin
 
 cp -r $mnt0/usr/local/aws-cli $mnt/usr/local
 
