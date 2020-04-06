@@ -120,13 +120,6 @@ buildah run $ctr0 aws/install
 ctr=$(buildah from fedora:31)
 mnt=$(buildah mount $ctr)
 
-echo $mnt0
-
-ls -al $mnt0/usr/local/bin
-ls -al $mnt0/usr/local/bin/aws
-ls -al $mnt0/usr/local/bin/aws_completer
-ls -al $mnt0/usr/local
-
 cp -P $mnt0/usr/local/bin/aws $mnt/usr/local/bin
 cp -P $mnt0/usr/local/bin/aws_completer $mnt/usr/local/bin
 
