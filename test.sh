@@ -123,6 +123,8 @@ mnt=$(buildah mount $ctr)
 echo $mnt0
 
 ls -al $mnt0/usr/local/bin
+ls -al $mnt0/usr/local/bin/aws
+ls -al $mnt0/usr/local/bin/aws_completer
 ls -al $mnt0/usr/local
 
 cp $mnt0/usr/local/bin/aws $mnt/usr/local/bin
