@@ -6,6 +6,9 @@ spec:
   containers:
   - name: buildah
     image: quay.io/buildah/stable:v1.14.3
+    env:
+    - name: STORAGE_DRIVER
+      value: vfs
     command: ["cat"]
     tty: true
 """
